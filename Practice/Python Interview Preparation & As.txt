@@ -1,0 +1,1653 @@
+# Python Interview Preparation & Assessment
+
+## Overview
+
+This document contains my Python interview preparation and self-assessment. It covers Python fundamentals, data structures, functions, OOP, exception handling, references, mutability, comprehensions, functional programming, and basic problem solving.
+
+The purpose of this assessment was to identify my strengths and weaknesses before attending Data Analyst / Data Science interviews.
+
+---
+
+# 1. Python Data Types
+
+### Question
+
+```python
+x = 10
+y = "10"
+z = 10.0
+
+print(x + z)
+print(x + y)
+```
+
+### Answer
+
+* `x` → `int`
+* `y` → `str`
+* `z` → `float`
+
+Output:
+
+```text
+20.0
+TypeError
+```
+
+### Explanation
+
+`int` and `float` can be added together, so `10 + 10.0` gives `20.0`.
+
+A number and a string cannot be added directly, so `x + y` produces a `TypeError`.
+
+---
+
+# 2. Python Operators
+
+```python
+a = 10
+b = 3
+
+print(a / b)
+print(a // b)
+print(a % b)
+print(a ** b)
+```
+
+### Output
+
+```text
+3.3333333333333335
+3
+1
+1000
+```
+
+### Explanation
+
+* `/` → normal division
+* `//` → floor division
+* `%` → remainder
+* `**` → exponent/power
+
+---
+
+# 3. String Indexing and Slicing
+
+```python
+name = "Varshini"
+
+print(name[0])
+print(name[-1])
+print(name[1:4])
+print(name[:4])
+print(name[4:])
+print(name[::-1])
+```
+
+### Output
+
+```text
+V
+i
+ars
+Vars
+hini
+inihsraV
+```
+
+### Important Rule
+
+Python slicing follows:
+
+```text
+[start : stop]
+```
+
+The start index is included, but the stop index is excluded.
+
+---
+
+# 4. String Immutability
+
+```python
+name = "Varshini"
+name[0] = "X"
+```
+
+### Result
+
+```text
+TypeError
+```
+
+### Explanation
+
+Strings are **immutable** in Python.
+
+This means individual characters of a string cannot be changed directly.
+
+---
+
+# 5. List Mutability
+
+```python
+numbers = [10, 20, 30]
+
+numbers[0] = 100
+
+print(numbers)
+```
+
+### Output
+
+```text
+[100, 20, 30]
+```
+
+### Explanation
+
+Lists are **mutable**, so their elements can be changed after creation.
+
+---
+
+# 6. List Methods
+
+```python
+numbers = [10, 20, 30]
+
+numbers.append(40)
+numbers.insert(1, 15)
+numbers.remove(30)
+numbers.pop()
+
+print(numbers)
+```
+
+### Output
+
+```text
+[10, 15, 20]
+```
+
+### Methods
+
+* `append()` → adds an element at the end
+* `insert()` → adds an element at a specific position
+* `remove()` → removes an element by value
+* `pop()` → removes an element by index and returns it
+
+---
+
+# 7. remove(), pop(), and del
+
+### `remove()`
+
+```python
+numbers.remove(30)
+```
+
+Removes the first occurrence of the value `30`.
+
+### `pop()`
+
+```python
+x = numbers.pop(2)
+```
+
+Removes the element at index `2` and returns the removed value.
+
+### `del`
+
+```python
+del numbers[2]
+```
+
+Deletes the element at index `2`.
+
+### Important Difference
+
+```text
+remove → value
+pop    → index
+del    → index
+```
+
+---
+
+# 8. Dictionary Access
+
+```python
+student = {
+    "name": "Varshini",
+    "age": 22,
+    "course": "CSE"
+}
+
+print(student["name"])
+print(student.get("age"))
+print(student.get("city"))
+```
+
+### Output
+
+```text
+Varshini
+22
+None
+```
+
+### `[]` vs `.get()`
+
+```python
+student["city"]
+```
+
+raises a `KeyError` if the key does not exist.
+
+```python
+student.get("city")
+```
+
+returns `None` by default if the key does not exist.
+
+---
+
+# 9. Dictionary Loop
+
+```python
+for key in student:
+    print(key, student[key])
+```
+
+### Output
+
+```text
+name Varshini
+age 22
+course CSE
+```
+
+Here:
+
+* `key` → dictionary key
+* `student[key]` → corresponding value
+
+---
+
+# 10. if / elif / else
+
+```python
+marks = 75
+
+if marks >= 90:
+    print("A")
+elif marks >= 60:
+    print("B")
+else:
+    print("C")
+```
+
+### Output
+
+```text
+B
+```
+
+Python checks the conditions from top to bottom.
+
+Once a condition is true, the corresponding block executes and the remaining `elif`/`else` branches are skipped.
+
+---
+
+# 11. range()
+
+```python
+for i in range(1, 6):
+    print(i)
+```
+
+Output:
+
+```text
+1
+2
+3
+4
+5
+```
+
+```python
+for i in range(5):
+    print(i)
+```
+
+Output:
+
+```text
+0
+1
+2
+3
+4
+```
+
+### Important Rule
+
+The stop value in `range()` is **exclusive**.
+
+---
+
+# 12. Functions
+
+```python
+def add(a, b):
+    return a + b
+
+result = add(10, 20)
+
+print(result)
+```
+
+### Output
+
+```text
+30
+```
+
+### Explanation
+
+* `a` and `b` → parameters
+* `add(10, 20)` → function call
+* `return` → sends the result back to the caller
+* `result` → stores the returned value
+
+---
+
+# 13. return Statement
+
+```python
+def test():
+    print("Hello")
+    return 10
+    print("World")
+
+x = test()
+print(x)
+```
+
+### Output
+
+```text
+Hello
+10
+```
+
+### Explanation
+
+`return` immediately exits the function.
+
+Therefore:
+
+```python
+print("World")
+```
+
+is never executed.
+
+---
+
+# 14. List Comprehension
+
+```python
+numbers = [1, 2, 3, 4, 5]
+
+squares = [x * x for x in numbers]
+
+print(squares)
+```
+
+### Output
+
+```text
+[1, 4, 9, 16, 25]
+```
+
+List comprehension provides a concise way to create a list based on an iterable.
+
+---
+
+# 15. Frequency Count Using Dictionary
+
+```python
+sentence = "apple banana apple orange banana apple"
+
+words = sentence.split()
+
+freq = {}
+
+for word in words:
+    freq[word] = freq.get(word, 0) + 1
+
+print(freq)
+```
+
+### Result
+
+```text
+apple → 3
+banana → 2
+orange → 1
+```
+
+### Explanation
+
+`.get(word, 0)` returns the current count if the word exists. Otherwise, it starts with `0`.
+
+Then:
+
+```python
++ 1
+```
+
+increments the count.
+
+---
+
+# 16. *args and **kwargs
+
+```python
+def test(*args, **kwargs):
+    print(args)
+    print(kwargs)
+
+test(
+    10,
+    20,
+    30,
+    name="Varshini",
+    age=22
+)
+```
+
+### Correct Output
+
+```text
+(10, 20, 30)
+{'name': 'Varshini', 'age': 22}
+```
+
+### Explanation
+
+`*args` collects positional arguments.
+
+`**kwargs` collects keyword arguments.
+
+Therefore:
+
+```text
+args → (10, 20, 30)
+
+kwargs → {'name': 'Varshini', 'age': 22}
+```
+
+---
+
+# 17. Object-Oriented Programming
+
+```python
+class Car:
+
+    def __init__(self, brand):
+        self.brand = brand
+
+    def show(self):
+        print(self.brand)
+
+
+car1 = Car("Toyota")
+car2 = Car("BMW")
+
+car1.show()
+car2.show()
+```
+
+### Output
+
+```text
+Toyota
+BMW
+```
+
+### Important Concepts
+
+`__init__()` initializes an object.
+
+`self` refers to the **current object/instance**.
+
+`car1` and `car2` are separate objects (instances) of the `Car` class.
+
+---
+
+# 18. self
+
+```python
+class Student:
+
+    def __init__(self, name):
+        self.name = name
+
+    def show(self):
+        print(self.name)
+
+
+s1 = Student("Varshini")
+s2 = Student("Rahul")
+
+s1.show()
+s2.show()
+```
+
+### Output
+
+```text
+Varshini
+Rahul
+```
+
+`self.name` refers to the `name` belonging to the current object.
+
+Therefore:
+
+```text
+s1 → Varshini
+s2 → Rahul
+```
+
+---
+
+# 19. Inheritance
+
+```python
+class Parent:
+
+    def show(self):
+        print("Parent")
+
+
+class Child(Parent):
+
+    def display(self):
+        print("Child")
+
+
+c = Child()
+
+c.show()
+c.display()
+```
+
+### Output
+
+```text
+Parent
+Child
+```
+
+### Explanation
+
+`Child` inherits from `Parent`.
+
+Therefore, a `Child` object can access methods defined in `Parent`.
+
+Inheritance allows a class to reuse attributes and methods from another class.
+
+---
+
+# 20. Method Overriding
+
+```python
+class Parent:
+
+    def show(self):
+        print("Parent")
+
+
+class Child(Parent):
+
+    def show(self):
+        print("Child")
+
+
+c = Child()
+c.show()
+```
+
+### Output
+
+```text
+Child
+```
+
+### Explanation
+
+The `Child` class provides its own implementation of `show()`.
+
+This is called **method overriding**.
+
+The child implementation is used when `c.show()` is called.
+
+---
+
+# 21. Exception Handling
+
+```python
+try:
+    a = int(input("Enter number: "))
+    print(10 / a)
+
+except ValueError:
+    print("Invalid number")
+
+except ZeroDivisionError:
+    print("Cannot divide by zero")
+```
+
+### Possible Results
+
+If input is:
+
+```text
+5
+```
+
+Output:
+
+```text
+2.0
+```
+
+If input is:
+
+```text
+abc
+```
+
+Output:
+
+```text
+Invalid number
+```
+
+If input is:
+
+```text
+0
+```
+
+Output:
+
+```text
+Cannot divide by zero
+```
+
+### Explanation
+
+Different exceptions can be handled using different `except` blocks.
+
+---
+
+# 22. == vs is
+
+```python
+a = [1, 2, 3]
+b = [1, 2, 3]
+
+print(a == b)
+print(a is b)
+```
+
+### Output
+
+```text
+True
+False
+```
+
+### Explanation
+
+`==` compares **values/content**.
+
+`is` checks whether two variables refer to the **same object**.
+
+---
+
+# 23. Mutable Default Argument
+
+```python
+def add_item(item, items=[]):
+    items.append(item)
+    return items
+
+
+print(add_item("A"))
+print(add_item("B"))
+print(add_item("C"))
+```
+
+### Output
+
+```text
+['A']
+['A', 'B']
+['A', 'B', 'C']
+```
+
+### Explanation
+
+The default list is created only once, when the function is defined.
+
+Therefore, the same list is reused across function calls.
+
+A safer approach is:
+
+```python
+def add_item(item, items=None):
+
+    if items is None:
+        items = []
+
+    items.append(item)
+
+    return items
+```
+
+---
+
+# 24. List Reference
+
+```python
+numbers = [1, 2, 3]
+
+copy_numbers = numbers
+
+copy_numbers.append(4)
+
+print(numbers)
+print(copy_numbers)
+```
+
+### Output
+
+```text
+[1, 2, 3, 4]
+[1, 2, 3, 4]
+```
+
+### Explanation
+
+`copy_numbers = numbers` does not create a new list.
+
+Both variables refer to the **same list object**.
+
+---
+
+# 25. List Copy
+
+```python
+numbers = [1, 2, 3]
+
+copy_numbers = numbers.copy()
+
+copy_numbers.append(4)
+
+print(numbers)
+print(copy_numbers)
+```
+
+### Output
+
+```text
+[1, 2, 3]
+[1, 2, 3, 4]
+```
+
+### Explanation
+
+`.copy()` creates a new outer list.
+
+Therefore, modifying `copy_numbers` does not modify the original list.
+
+---
+
+# 26. Shallow Copy
+
+```python
+numbers = [[1, 2], [3, 4]]
+
+copy_numbers = numbers.copy()
+
+copy_numbers[0].append(99)
+
+print(numbers)
+print(copy_numbers)
+```
+
+### Output
+
+```text
+[[1, 2, 99], [3, 4]]
+[[1, 2, 99], [3, 4]]
+```
+
+### Explanation
+
+`.copy()` creates a **shallow copy**.
+
+The outer list is copied, but the nested lists are still shared.
+
+For a completely independent nested copy, we can use:
+
+```python
+import copy
+
+copy_numbers = copy.deepcopy(numbers)
+```
+
+---
+
+# 27. map() and lambda
+
+```python
+numbers = [1, 2, 3, 4, 5]
+
+result = list(
+    map(lambda x: x * 2, numbers)
+)
+
+print(result)
+```
+
+### Output
+
+```text
+[2, 4, 6, 8, 10]
+```
+
+### Explanation
+
+`lambda` creates a small anonymous function.
+
+`map()` applies that function to every element.
+
+---
+
+# 28. filter()
+
+```python
+numbers = [1, 2, 3, 4, 5, 6]
+
+result = list(
+    filter(lambda x: x % 2 == 0, numbers)
+)
+
+print(result)
+```
+
+### Output
+
+```text
+[2, 4, 6]
+```
+
+### Explanation
+
+`filter()` keeps elements for which the condition returns `True`.
+
+```python
+x % 2 == 0
+```
+
+checks whether a number is even.
+
+---
+
+# 29. Find Largest Number Without max()
+
+```python
+numbers = [10, 45, 23, 89, 12, 67]
+
+m = numbers[0]
+
+for i in numbers:
+
+    if i > m:
+        m = i
+
+print(m)
+```
+
+### Output
+
+```text
+89
+```
+
+### Explanation
+
+Start with the first element as the largest.
+
+Then compare every number with the current largest.
+
+If a larger number is found, update the variable.
+
+---
+
+# 30. Frequency Count in a List
+
+The general approach is:
+
+```python
+numbers = [1, 2, 2, 3, 1, 2]
+
+freq = {}
+
+for num in numbers:
+    freq[num] = freq.get(num, 0) + 1
+
+print(freq)
+```
+
+### Result
+
+```text
+{
+    1: 2,
+    2: 3,
+    3: 1
+}
+```
+
+The important point is that `.split()` is used for strings, not lists.
+
+---
+
+# 31. Find Duplicates Without set()
+
+```python
+numbers = [1, 2, 3, 2, 4, 1, 5, 2]
+
+count = {}
+
+for i in numbers:
+
+    if i not in count:
+        count[i] = 1
+    else:
+        count[i] += 1
+
+
+for i in count:
+
+    if count[i] > 1:
+        print(i)
+```
+
+### Output
+
+```text
+1
+2
+```
+
+### Explanation
+
+The dictionary stores the frequency of each number.
+
+Numbers with a frequency greater than `1` are duplicates.
+
+---
+
+# 32. zip()
+
+```python
+names = ["A", "B", "C"]
+marks = [80, 90, 70]
+
+result = dict(zip(names, marks))
+
+print(result)
+```
+
+### Output
+
+```text
+{'A': 80, 'B': 90, 'C': 70}
+```
+
+`zip()` combines elements position by position.
+
+---
+
+# 33. zip() With Different Lengths
+
+```python
+a = [1, 2, 3, 4]
+b = ["A", "B"]
+
+print(list(zip(a, b)))
+```
+
+### Output
+
+```text
+[(1, 'A'), (2, 'B')]
+```
+
+### Important Rule
+
+`zip()` stops when the **shortest iterable** is exhausted.
+
+---
+
+# 34. Local and Global Scope
+
+```python
+x = 10
+
+def test():
+
+    x = 20
+
+    print(x)
+
+
+test()
+
+print(x)
+```
+
+### Output
+
+```text
+20
+10
+```
+
+### Explanation
+
+The `x` inside the function is a **local variable**.
+
+The `x` outside the function is a **global variable**.
+
+They are separate variable bindings.
+
+---
+
+# 35. global Keyword
+
+```python
+x = 10
+
+def test():
+
+    global x
+
+    x = 20
+
+
+test()
+
+print(x)
+```
+
+### Output
+
+```text
+20
+```
+
+### Explanation
+
+`global x` tells Python that the function should use the existing global variable `x` instead of creating a local variable.
+
+---
+
+# 36. Mutation Inside a Function
+
+```python
+numbers = [1, 2, 3]
+
+def change(lst):
+
+    lst.append(4)
+
+
+change(numbers)
+
+print(numbers)
+```
+
+### Output
+
+```text
+[1, 2, 3, 4]
+```
+
+### Explanation
+
+Lists are mutable.
+
+The parameter `lst` refers to the same list object as `numbers`.
+
+Therefore:
+
+```python
+lst.append(4)
+```
+
+modifies the existing list.
+
+---
+
+# 37. Reassignment Inside a Function
+
+```python
+numbers = [1, 2, 3]
+
+def change(lst):
+
+    lst = [10, 20, 30]
+
+
+change(numbers)
+
+print(numbers)
+```
+
+### Output
+
+```text
+[1, 2, 3]
+```
+
+### Explanation
+
+Here, `lst` is reassigned to a completely new list.
+
+The original `numbers` variable still refers to the original list.
+
+### Important Difference
+
+```text
+Mutation → changes the existing object
+
+Reassignment → makes the variable refer to another object
+```
+
+---
+
+# 38. Function Without return
+
+```python
+def add(a, b):
+
+    print(a + b)
+
+
+result = add(10, 20)
+
+print(result)
+```
+
+### Output
+
+```text
+30
+None
+```
+
+### Explanation
+
+The function prints `30`, but it does not return anything.
+
+A Python function without an explicit `return` returns:
+
+```python
+None
+```
+
+Therefore:
+
+```python
+result = None
+```
+
+---
+
+# 39. List Comprehension With Condition
+
+```python
+numbers = [1, 2, 3, 4, 5, 6, 7, 8]
+
+result = [
+    x for x in numbers
+    if x % 2 == 0 and x > 4
+]
+
+print(result)
+```
+
+### Output
+
+```text
+[6, 8]
+```
+
+The code keeps numbers that satisfy **both** conditions:
+
+1. Number is even.
+2. Number is greater than 4.
+
+---
+
+# 40. Nested Loops
+
+```python
+for i in range(3):
+
+    for j in range(2):
+
+        print(i, j)
+```
+
+### Output
+
+```text
+0 0
+0 1
+1 0
+1 1
+2 0
+2 1
+```
+
+The inner loop executes completely for every iteration of the outer loop.
+
+Total executions:
+
+```text
+3 × 2 = 6
+```
+
+---
+
+# 41. Second Largest Distinct Number
+
+```python
+numbers = [10, 5, 20, 8, 20, 15]
+
+largest = None
+second_largest = None
+
+for num in numbers:
+
+    if largest is None or num > largest:
+
+        second_largest = largest
+        largest = num
+
+    elif num != largest and (
+        second_largest is None or num > second_largest
+    ):
+
+        second_largest = num
+
+
+print(second_largest)
+```
+
+### Output
+
+```text
+15
+```
+
+### Explanation
+
+Two variables are maintained:
+
+```text
+largest
+second_largest
+```
+
+When a new largest number is found, the previous largest becomes the second largest.
+
+The condition:
+
+```python
+num != largest
+```
+
+ensures that duplicate values are not treated as a separate distinct number.
+
+---
+
+# 42. Palindrome Check Without [::-1]
+
+```python
+word = "madam"
+
+reverse = ""
+
+for i in range(len(word) - 1, -1, -1):
+
+    reverse = reverse + word[i]
+
+
+if word == reverse:
+
+    print("palindrome")
+```
+
+### Output
+
+```text
+palindrome
+```
+
+### Explanation
+
+The loop starts from the last index and moves toward the first index.
+
+It builds the reversed string.
+
+Then the original string is compared with the reversed string.
+
+If both are equal, the string is a palindrome.
+
+---
+
+# 43. Debugging Index vs Value
+
+Incorrect code:
+
+```python
+numbers = [10, 20, 30, 40]
+
+for i in range(len(numbers)):
+
+    if numbers[i] > 25:
+
+        print(i)
+```
+
+This prints:
+
+```text
+2
+3
+```
+
+because `i` is the index.
+
+### Correct Code
+
+```python
+numbers = [10, 20, 30, 40]
+
+for i in range(len(numbers)):
+
+    if numbers[i] > 25:
+
+        print(numbers[i])
+```
+
+### Output
+
+```text
+30
+40
+```
+
+### Important Difference
+
+```text
+i           → index
+numbers[i]  → value
+```
+
+---
+
+# 44. Default Function Parameters
+
+```python
+def calculate(a, b=10):
+
+    return a + b
+
+
+print(calculate(5))
+print(calculate(5, 20))
+```
+
+### Output
+
+```text
+15
+25
+```
+
+### Explanation
+
+`b=10` is a **default parameter**.
+
+When only one argument is provided:
+
+```python
+calculate(5)
+```
+
+`b` uses the default value `10`.
+
+When two arguments are provided:
+
+```python
+calculate(5, 20)
+```
+
+the supplied value `20` replaces the default value.
+
+---
+
+# 45. Even Numbers and Squaring
+
+```python
+numbers = [1, 2, 3, 4, 5, 6]
+
+result = []
+
+for num in numbers:
+
+    if num % 2 == 0:
+
+        result.append(num * num)
+
+
+print(result)
+```
+
+### Output
+
+```text
+[4, 16, 36]
+```
+
+### Explanation
+
+The loop checks every number.
+
+If the number is even:
+
+```python
+num % 2 == 0
+```
+
+it is squared and appended to the result list.
+
+---
+
+# Python Assessment Summary
+
+## Strengths
+
+I have a good foundation in:
+
+* Python syntax
+* Variables and data types
+* Operators
+* Strings
+* String indexing and slicing
+* Lists
+* Dictionaries
+* Loops
+* Functions
+* List comprehensions
+* `map()`
+* `filter()`
+* Lambda functions
+* Basic OOP
+* Inheritance
+* Method overriding
+* Exception handling
+* `==` vs `is`
+* List references
+* Basic copying
+* Frequency counting
+* Duplicate detection
+* `zip()`
+* Basic debugging
+* Basic algorithmic problem solving
+
+## Areas That Need Improvement
+
+### 1. Technical explanations
+
+I can often understand the code but need to improve how I explain the concept using precise technical terms.
+
+### 2. References and objects
+
+I need to be confident about:
+
+* variables
+* objects
+* references
+* mutable objects
+* immutable objects
+
+### 3. Shallow vs Deep Copy
+
+I need more practice understanding nested objects and the difference between:
+
+```python
+.copy()
+```
+
+and:
+
+```python
+copy.deepcopy()
+```
+
+### 4. *args and **kwargs
+
+I need to remember:
+
+```text
+*args   → positional arguments
+**kwargs → keyword arguments
+```
+
+### 5. Scope
+
+I need to clearly distinguish:
+
+```text
+local scope
+global scope
+```
+
+and understand the exact purpose of the `global` keyword.
+
+### 6. Mutation vs Reassignment
+
+I need to distinguish between:
+
+```python
+lst.append(4)
+```
+
+which mutates an existing list, and:
+
+```python
+lst = [10, 20, 30]
+```
+
+which reassigns the local variable to another object.
+
+### 7. Index vs Value
+
+When using:
+
+```python
+for i in range(len(numbers)):
+```
+
+`i` is the index.
+
+The actual value is:
+
+```python
+numbers[i]
+```
+
+---
+
+# Final Python Assessment
+
+## Current Level
+
+**Basic → Lower Intermediate Python**
+
+I am not a complete beginner because I can write Python programs, understand common Python constructs, and solve basic programming problems.
+
+However, I am not yet at an advanced/interview-strong Python level.
+
+## Interview Readiness
+
+For a **Data Analyst internship**, my Python foundation is usable.
+
+However, I should continue improving:
+
+* explaining concepts clearly
+* debugging
+* writing clean code
+* Python memory/reference concepts
+* Pandas
+* NumPy
+* data cleaning
+* EDA
+* practical data-analysis problems
+
+For Data Analyst interviews, Python is only one part of the preparation. SQL, Excel, statistics, Pandas, EDA, and project explanation are also important.
+
+## Main Learning Goal
+
+My biggest improvement area is not just writing code.
+
+I need to be able to:
+
+> **Understand the code → write the code → explain the code clearly.**
+
+That is the standard I should aim for in interviews.
