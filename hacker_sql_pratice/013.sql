@@ -8,7 +8,7 @@ Write a SQL query to find the employees who earn the top 3 highest unique salari
 
 # Solution 1: Using Subquery
 
-```sql
+sql
 SELECT Department, Employee, Salary
 FROM (
     SELECT
