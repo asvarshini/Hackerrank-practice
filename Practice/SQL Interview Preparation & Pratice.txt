@@ -1,0 +1,1332 @@
+# SQL Interview Preparation & Practice
+
+## Q1 — SELECT + WHERE
+
+**Question:**
+Display the names and salaries of employees who earn more than 50,000.
+
+**My Answer:**
+
+```sql
+SELECT name, salary
+FROM Employees
+WHERE salary > 50000;
+```
+
+**Result:** Correct ✅
+
+**Concept:** `SELECT` chooses columns, `WHERE` filters rows.
+
+---
+
+## Q2 — ORDER BY
+
+**Question:**
+Display all employees ordered by salary from highest to lowest.
+
+**My Answer:**
+
+```sql
+SELECT name, salary
+FROM Employees
+ORDER BY salary DESC;
+```
+
+**Result:** Correct ✅
+
+**Concept:**
+
+* `ASC` → ascending
+* `DESC` → descending
+
+---
+
+## Q3 — DISTINCT
+
+**Question:**
+Find all unique departments.
+
+**My Answer:**
+
+```sql
+SELECT DISTINCT department
+FROM Employees;
+```
+
+**Result:** Correct ✅
+
+**Concept:** `DISTINCT` removes duplicate values.
+
+---
+
+## Q4 — AND
+
+**Question:**
+Find employees who work in IT and earn more than 50,000.
+
+**My Answer:**
+
+```sql
+SELECT *
+FROM Employees
+WHERE department = 'IT'
+AND salary > 50000;
+```
+
+**Result:** Correct ✅
+
+**Concept:** `AND` requires both conditions to be true.
+
+---
+
+## Q5 — OR
+
+**Question:**
+Find employees who work in IT or HR.
+
+**My Answer:**
+
+```sql
+SELECT *
+FROM Employees
+WHERE department = 'IT'
+OR department = 'HR';
+```
+
+**Result:** Correct ✅
+
+**Concept:** `OR` requires at least one condition to be true.
+
+---
+
+## Q6 — BETWEEN
+
+**Question:**
+Find employees whose salary is between 40,000 and 55,000, including both values.
+
+**My Answer:**
+
+```sql
+SELECT *
+FROM Employees
+WHERE salary >= 40000
+AND salary <= 55000;
+```
+
+**Result:** Correct ✅
+
+Alternative:
+
+```sql
+SELECT *
+FROM Employees
+WHERE salary BETWEEN 40000 AND 55000;
+```
+
+**Concept:** `BETWEEN` is inclusive of both boundaries.
+
+---
+
+## Q7 — LIKE
+
+**Question:**
+Find employees whose name starts with `S`.
+
+**My Answer:**
+
+```sql
+SELECT name
+FROM Employees
+WHERE name LIKE 'S%';
+```
+
+**Result:** Correct ✅
+
+**Concept:**
+
+* `'S%'` → starts with S
+* `'%a'` → ends with a
+* `'%ri%'` → contains ri
+* `'_a%'` → second character is a
+
+---
+
+## Q8 — NULL
+
+**Question:**
+Find employees whose salary is NULL.
+
+**My Answer:**
+
+```sql
+SELECT *
+FROM Employees
+WHERE salary IS NULL;
+```
+
+**Result:** Correct ✅
+
+**Important:**
+
+Do not use:
+
+```sql
+WHERE salary = NULL;
+```
+
+Use:
+
+```sql
+WHERE salary IS NULL;
+```
+
+For non-NULL:
+
+```sql
+WHERE salary IS NOT NULL;
+```
+
+---
+
+## Q9 — AVG
+
+**Question:**
+Find the average salary of all employees.
+
+**My Answer:**
+
+```sql
+SELECT AVG(salary) AS sal
+FROM Employees;
+```
+
+**Result:** Correct ✅
+
+**Concept:** `AVG()` calculates the average of non-NULL values.
+
+---
+
+## Q10 — GROUP BY
+
+**Question:**
+Find the average salary for each department.
+
+**My Answer:**
+
+```sql
+SELECT AVG(salary)
+FROM Employees
+GROUP BY department;
+```
+
+**Result:** Correct logic ✅
+
+Better interview version:
+
+```sql
+SELECT department, AVG(salary) AS average_salary
+FROM Employees
+GROUP BY department;
+```
+
+**Concept:** `GROUP BY` creates groups, and aggregate functions calculate values within each group.
+
+---
+
+## Q11 — HAVING
+
+**Question:**
+Find departments whose average salary is greater than 50,000.
+
+**My Answer:**
+
+```sql
+SELECT AVG(salary) AS sal, department
+FROM Employees
+GROUP BY department
+HAVING sal > 50000;
+```
+
+**Result:** Correct in MySQL ✅
+
+More portable version:
+
+```sql
+SELECT department, AVG(salary) AS average_salary
+FROM Employees
+GROUP BY department
+HAVING AVG(salary) > 50000;
+```
+
+**Important difference:**
+
+```sql
+WHERE
+```
+
+→ filters rows before grouping.
+
+```sql
+HAVING
+```
+
+→ filters groups after `GROUP BY`.
+
+---
+
+## Q12 — COUNT
+
+**Question:**
+Find how many employees are there in each department.
+
+**My Answer:**
+
+```sql
+SELECT COUNT(employee_id) AS employee_count,
+       department
+FROM Employees
+GROUP BY department;
+```
+
+**Result:** Correct ✅
+
+**Concept:**
+
+```sql
+COUNT(*)
+```
+
+counts all rows.
+
+```sql
+COUNT(column_name)
+```
+
+counts only non-NULL values in that column.
+
+---
+
+## Q13 — INNER JOIN
+
+**Question:**
+Join Employees and Departments using `department_id` and display employee name and department name.
+
+**My Answer:**
+
+```sql
+SELECT e.name, d.department_name
+FROM Employees e
+JOIN Departments d
+ON e.department_id = d.department_id;
+```
+
+**Result:** Correct ✅
+
+**Concept:**
+
+* `JOIN` / `INNER JOIN` → returns matching rows from both tables.
+* `ON` → specifies the relationship between the tables.
+* `e` and `d` → table aliases.
+
+---
+
+## Q14 — LEFT JOIN
+
+**Question:**
+Show every department, even if that department has no employees.
+
+**My Answer:**
+
+```sql
+SELECT d.department_name, e.name
+FROM Employees e
+LEFT JOIN Departments d
+ON d.department_id = e.department_id;
+```
+
+**Result:** Partially correct ⚠️
+
+Correct query:
+
+```sql
+SELECT d.department_name, e.name
+FROM Departments d
+LEFT JOIN Employees e
+ON d.department_id = e.department_id;
+```
+
+**Important concept:**
+
+A `LEFT JOIN` keeps **all rows from the left table**.
+
+Therefore, if we want every department, `Departments` must be on the left.
+
+---
+
+## Q15 — INNER JOIN vs LEFT JOIN
+
+**Question:**
+What is the difference between INNER JOIN and LEFT JOIN?
+
+**My Answer:**
+
+> INNER JOIN gives similar values present in both tables and LEFT JOIN gives all rows present on the left table and matching rows on the right table.
+
+**Result:** Correct concept ✅
+
+Better interview explanation:
+
+> INNER JOIN returns only rows where there is a match in both tables. LEFT JOIN returns all rows from the left table and matching rows from the right table. If there is no match, the right-side columns contain NULL.
+
+---
+
+## Q16 — Subquery
+
+**Question:**
+Find employees whose salary is greater than the average salary of all employees.
+
+**My Answer:**
+
+```sql
+SELECT employee_id
+FROM (
+    SELECT AVG(salary) AS sa
+    FROM Employees
+)
+HAVING salary > sa;
+```
+
+**Result:** Incorrect ⚠️
+
+Correct approach:
+
+```sql
+SELECT employee_id, name, salary
+FROM Employees
+WHERE salary > (
+    SELECT AVG(salary)
+    FROM Employees
+);
+```
+
+**Concept:**
+
+The subquery calculates the overall average first. The outer query compares every employee's salary with that average.
+
+---
+
+## Q17 — CASE WHEN
+
+**Question:**
+Classify employees based on salary:
+
+* Salary >= 55,000 → High
+* Salary 40,000–54,999 → Medium
+* Salary < 40,000 → Low
+
+**My Answer:**
+
+```sql
+SELECT
+    CASE
+        WHEN salary >= 55000 THEN 'High'
+        WHEN salary >= 40000 AND salary <= 54999 THEN 'Medium'
+        ELSE 'Low'
+    END
+FROM Employees;
+```
+
+**Result:** Correct ✅
+
+Better version:
+
+```sql
+SELECT
+    name,
+    salary,
+    CASE
+        WHEN salary >= 55000 THEN 'High'
+        WHEN salary >= 40000 THEN 'Medium'
+        ELSE 'Low'
+    END AS salary_category
+FROM Employees;
+```
+
+**Concept:** `CASE WHEN` is SQL's conditional `IF/ELSE` logic.
+
+---
+
+## Q18 — COALESCE
+
+**Question:**
+Display `"Not Provided"` when a customer's phone number is NULL.
+
+**My Answer:**
+
+```sql
+SELECT *
+FROM Customers
+WHERE phone == NULL,
+COALESCE("Not Provided");
+```
+
+**Result:** Incorrect ⚠️
+
+Correct query:
+
+```sql
+SELECT
+    customer_id,
+    name,
+    COALESCE(phone, 'Not Provided') AS phone
+FROM Customers;
+```
+
+**Concept:**
+
+```sql
+COALESCE(phone, 'Not Provided')
+```
+
+means:
+
+> If phone is not NULL, return the phone. Otherwise, return `Not Provided`.
+
+---
+
+## Q19 — RANK + PARTITION BY
+
+**Question:**
+Rank employees by salary within each department.
+
+**My Answer:**
+
+```sql
+SELECT *,
+       DENSE_RANK() OVER (
+           PARTITION BY department
+           ORDER BY salary DESC
+       ) AS rank
+FROM Employees;
+```
+
+**Result:** Concept correct, but the question specifically asked for `RANK()`.
+
+Correct requested version:
+
+```sql
+SELECT *,
+       RANK() OVER (
+           PARTITION BY department
+           ORDER BY salary DESC
+       ) AS salary_rank
+FROM Employees;
+```
+
+**Concept:**
+
+```sql
+PARTITION BY department
+```
+
+creates separate groups for each department.
+
+```sql
+ORDER BY salary DESC
+```
+
+ranks salaries from highest to lowest.
+
+---
+
+## Q20 — Top 3 Customers
+
+**Question:**
+Find the top 3 customers based on total order amount.
+
+**My Answer:**
+
+```sql
+SELECT SUM(amount) AS s,
+       customer_id AS n,
+       order_id
+FROM Orders
+GROUP BY customer_id
+ORDER BY s DESC
+LIMIT 3;
+```
+
+**Result:** Mostly correct ⚠️
+
+The problem is selecting `order_id` while grouping only by `customer_id`.
+
+Correct query:
+
+```sql
+SELECT
+    customer_id,
+    SUM(amount) AS total_amount
+FROM Orders
+GROUP BY customer_id
+ORDER BY total_amount DESC
+LIMIT 3;
+```
+
+**Concept:**
+
+> Aggregate → GROUP BY → ORDER BY → LIMIT
+
+---
+
+## Q21 — WHERE vs HAVING
+
+**Question:**
+What is wrong with this query?
+
+```sql
+SELECT department, AVG(salary)
+FROM Employees
+WHERE AVG(salary) > 50000
+GROUP BY department;
+```
+
+**My Answer:**
+
+```sql
+SELECT department, AVG(salary)
+FROM Employees
+GROUP BY department
+HAVING AVG(salary) > 50000;
+```
+
+**Result:** Correct ✅
+
+**Concept:**
+
+`WHERE` is for filtering individual rows.
+
+`HAVING` is for filtering grouped/aggregated results.
+
+---
+
+## Q22 — Second Highest Salary
+
+**Question:**
+Find the second-highest salary.
+
+**My Answer:**
+
+```sql
+SELECT MAX(salary)
+FROM Employees
+WHERE salary < (
+    SELECT MAX(salary)
+    FROM Employees
+);
+```
+
+**Result:** Correct ✅
+
+This finds the **second distinct-highest salary**.
+
+**Logic:**
+
+1. Find maximum salary.
+2. Ignore that salary.
+3. Find maximum from the remaining salaries.
+
+---
+
+## Q23 — Find Duplicates
+
+**Question:**
+Find duplicate email addresses and their counts.
+
+**My Answer:**
+
+```sql
+SELECT COUNT(email) AS e
+FROM Customer
+GROUP BY email;
+```
+
+**Result:** Partially correct ⚠️
+
+Correct query:
+
+```sql
+SELECT
+    email,
+    COUNT(email) AS email_count
+FROM Customer
+GROUP BY email
+HAVING COUNT(email) > 1;
+```
+
+**Concept:**
+
+```sql
+GROUP BY email
+HAVING COUNT(email) > 1
+```
+
+is a common pattern for finding duplicates.
+
+---
+
+## Q24 — Monthly Revenue
+
+**Question:**
+Find total revenue for each month.
+
+**My Answer:**
+
+```sql
+SELECT
+    SUM(amount) AS total_revenue,
+    DATE_FORMAT(order_date, '%y-%m')
+FROM Orders
+GROUP BY DATE(order_date);
+```
+
+**Result:** Partially correct ⚠️
+
+The problem is grouping by the individual date instead of the month.
+
+Correct query:
+
+```sql
+SELECT
+    DATE_FORMAT(order_date, '%Y-%m') AS month,
+    SUM(amount) AS total_revenue
+FROM Orders
+GROUP BY DATE_FORMAT(order_date, '%Y-%m')
+ORDER BY month;
+```
+
+**Important:**
+
+```text
+%Y → 2026
+%y → 26
+```
+
+For analytics, `%Y-%m` is usually clearer.
+
+---
+
+## Q25 — Running Total
+
+**Question:**
+Calculate a running total of revenue month by month.
+
+**Result:** I did not know this one initially.
+
+Correct pattern:
+
+```sql
+SELECT
+    month,
+    monthly_revenue,
+    SUM(monthly_revenue) OVER (
+        ORDER BY month
+    ) AS running_revenue
+FROM (
+    SELECT
+        DATE_FORMAT(order_date, '%Y-%m') AS month,
+        SUM(amount) AS monthly_revenue
+    FROM Orders
+    GROUP BY DATE_FORMAT(order_date, '%Y-%m')
+) AS monthly_data
+ORDER BY month;
+```
+
+**Concept:**
+
+```sql
+SUM(monthly_revenue) OVER (ORDER BY month)
+```
+
+creates a cumulative/running total.
+
+---
+
+## Q26 — Customers With More Than 2 Orders
+
+**Question:**
+Find customers who have placed more than 2 orders.
+
+**My Answer:**
+
+```sql
+SELECT COUNT(customer_id) AS c,
+       customer_id
+FROM Orders
+GROUP BY customer_id
+HAVING c > 2;
+```
+
+**Result:** Correct in MySQL ✅
+
+Cleaner version:
+
+```sql
+SELECT
+    customer_id,
+    COUNT(customer_id) AS order_count
+FROM Orders
+GROUP BY customer_id
+HAVING COUNT(customer_id) > 2;
+```
+
+---
+
+## Q27 — COUNT(*) vs COUNT(column)
+
+**Question:**
+What is the difference between COUNT(*) and COUNT(column_name)?
+
+**My Answer:**
+
+> First one is to count rows and second one is to count column_name rows.
+
+**Result:** Partially correct ⚠️
+
+Better explanation:
+
+> `COUNT(*)` counts every row, while `COUNT(column_name)` counts only non-NULL values in that column.
+
+Example:
+
+| id | phone |
+| -: | ----- |
+|  1 | 9876  |
+|  2 | NULL  |
+|  3 | 9988  |
+
+```text
+COUNT(*)       → 3
+COUNT(phone)   → 2
+```
+
+---
+
+## Q28 — Customer Total Spending
+
+**Question:**
+Show customer name and total amount spent, including customers with no orders.
+
+**My Answer:**
+
+```sql
+SELECT c.name,
+       SUM(amount) AS s
+FROM Customers c
+LEFT JOIN Orders o
+ON o.customer_id = c.customer_id
+GROUP BY customer_id;
+```
+
+**Result:** Mostly correct ⚠️
+
+Better version:
+
+```sql
+SELECT
+    c.customer_id,
+    c.name,
+    COALESCE(SUM(o.amount), 0) AS total_spent
+FROM Customers c
+LEFT JOIN Orders o
+    ON c.customer_id = o.customer_id
+GROUP BY c.customer_id, c.name;
+```
+
+**Important concepts:**
+
+* `LEFT JOIN` keeps customers without orders.
+* `SUM()` calculates total spending.
+* `COALESCE()` converts NULL to 0.
+
+---
+
+## Q29 — CTE
+
+**Question:**
+What is a CTE?
+
+**My Answer:**
+
+> CTE is like creating a fake table first and then writing a query for the answer we want.
+
+**Result:** Basic understanding is correct ✅
+
+Better interview explanation:
+
+> A CTE, or Common Table Expression, is a temporary named result set created using the `WITH` clause. It can be used by the main query and exists only for the duration of that query.
+
+Example:
+
+```sql
+WITH customer_totals AS (
+    SELECT
+        customer_id,
+        SUM(amount) AS total_spent
+    FROM Orders
+    GROUP BY customer_id
+)
+SELECT *
+FROM customer_totals
+WHERE total_spent > 1000;
+```
+
+---
+
+# Practical SQL Interview Questions
+
+## Q30 — Delivered Revenue
+
+**Question:**
+Find total revenue for each customer from only Delivered orders.
+
+**My Answer:**
+
+```sql
+SELECT customer_id,
+       SUM(amount) AS total_revenue
+FROM Orders
+WHERE status = 'Delivered'
+GROUP BY customer_id;
+```
+
+**Result:** Correct ✅
+
+**Pattern:**
+
+> WHERE → GROUP BY → SUM
+
+---
+
+## Q31 — Highest Customer Revenue
+
+**Question:**
+Find the customer who generated the highest total revenue from Delivered orders.
+
+**My Answer:**
+
+```sql
+SELECT
+    SUM(amount) AS highest_rev,
+    customer_id
+FROM Orders
+WHERE status = 'Delivered'
+GROUP BY customer_id
+ORDER BY SUM(amount) DESC
+LIMIT 1;
+```
+
+**Result:** Correct ✅
+
+Better alias:
+
+```sql
+SUM(amount) AS total_revenue
+```
+
+because `SUM()` calculates the total first, while `ORDER BY` determines which total is highest.
+
+---
+
+## Q32 — JOIN + GROUP BY + HAVING
+
+**Question:**
+Find customer name and total Delivered revenue, showing only customers whose total revenue is greater than 700.
+
+**My Answer:**
+
+```sql
+SELECT
+    c.name,
+    SUM(o.amount) AS total_revenue
+FROM Customers c
+JOIN Orders o
+    ON c.customer_id = o.customer_id
+GROUP BY o.customer_id
+HAVING SUM(o.amount) > 700
+ORDER BY total_revenue DESC;
+```
+
+**Result:** Correct logic ✅
+
+Better grouping:
+
+```sql
+SELECT
+    c.name,
+    SUM(o.amount) AS total_revenue
+FROM Customers c
+JOIN Orders o
+    ON c.customer_id = o.customer_id
+GROUP BY c.customer_id, c.name
+HAVING SUM(o.amount) > 700
+ORDER BY total_revenue DESC;
+```
+
+---
+
+## Q33 — Highest Paid Employee Per Department
+
+**Question:**
+Find the highest-paid employee in each department.
+
+**My Answer:**
+
+```sql
+WITH e AS (
+    SELECT
+        department,
+        name,
+        salary,
+        employee_id,
+        DENSE_RANK() OVER (
+            PARTITION BY department
+            ORDER BY salary DESC
+        ) AS rank
+    FROM Employees
+)
+SELECT department, name, salary
+FROM e
+WHERE rank = 1;
+```
+
+**Result:** Concept correct, but initially had syntax errors.
+
+Correct version:
+
+```sql
+WITH ranked AS (
+    SELECT
+        department,
+        name,
+        salary,
+        employee_id,
+        DENSE_RANK() OVER (
+            PARTITION BY department
+            ORDER BY salary DESC
+        ) AS salary_rank
+    FROM Employees
+)
+SELECT department, name, salary
+FROM ranked
+WHERE salary_rank = 1;
+```
+
+**Why DENSE_RANK?**
+
+If two employees have the same highest salary, both receive rank `1`.
+
+---
+
+## Q34 — ROW_NUMBER()
+
+**Question:**
+Find the highest-paid employee in each department, but if two employees have the same highest salary, return only one employee.
+
+**My Answer:**
+
+```sql
+WITH du AS (
+    SELECT
+        name,
+        employee_id,
+        salary,
+        ROW_NUMBER() OVER (
+            PARTITION BY department
+            ORDER BY salary DESC
+        ) AS rank
+    FROM Employees
+)
+SELECT name, employee_id, salary
+FROM du
+WHERE rank = 1;
+```
+
+**Result:** Concept correct; initially missed a comma after `salary`.
+
+Correct version:
+
+```sql
+WITH du AS (
+    SELECT
+        name,
+        employee_id,
+        salary,
+        ROW_NUMBER() OVER (
+            PARTITION BY department
+            ORDER BY salary DESC
+        ) AS rn
+    FROM Employees
+)
+SELECT
+    name,
+    employee_id,
+    salary
+FROM du
+WHERE rn = 1;
+```
+
+**Key difference:**
+
+`ROW_NUMBER()` gives every row a unique number, even when values are tied.
+
+---
+
+## Q35 — JOIN Duplication Trap
+
+**Question:**
+Find total order amount for each customer without accidentally double-counting orders because of duplicate payment records.
+
+**My Answer:**
+
+```sql
+SELECT DISTINCT
+    c.customer_id,
+    SUM(o.amount) AS tot
+FROM Customers c
+JOIN Orders o
+    ON c.customer_id = o.customer_id
+GROUP BY o.customer_id;
+```
+
+**Result:** Correct approach ✅
+
+The important point was to calculate from `Orders.amount` without joining `Payments`, because duplicate payment rows could multiply the order rows.
+
+Cleaner version:
+
+```sql
+SELECT
+    c.customer_id,
+    SUM(o.amount) AS total_amount
+FROM Customers c
+JOIN Orders o
+    ON c.customer_id = o.customer_id
+GROUP BY c.customer_id;
+```
+
+---
+
+## Q36/Q37 — Above Department Average
+
+**Question:**
+Find employees whose salary is greater than the average salary of their own department.
+
+**My First Attempt:**
+
+```sql
+WITH new AS (
+    SELECT
+        employee_id,
+        name,
+        department,
+        AVG(salary) AS avg_sal
+    FROM Employees
+    GROUP BY department
+)
+SELECT employee_id, name, department, salary
+FROM new
+WHERE salary > avg_sal;
+```
+
+**Result:** Incorrect ⚠️
+
+The problem is that `GROUP BY department` creates one row per department, so individual employee salary information is lost.
+
+Correct approach:
+
+```sql
+SELECT
+    employee_id,
+    name,
+    department,
+    salary
+FROM (
+    SELECT
+        employee_id,
+        name,
+        department,
+        salary,
+        AVG(salary) OVER (
+            PARTITION BY department
+        ) AS department_avg
+    FROM Employees
+) AS e
+WHERE salary > department_avg;
+```
+
+**Key concept:**
+
+```sql
+AVG(salary)
+GROUP BY department
+```
+
+→ one row per department.
+
+But:
+
+```sql
+AVG(salary) OVER (PARTITION BY department)
+```
+
+→ keeps every employee row and adds the department average.
+
+---
+
+## Q38 — UNION vs UNION ALL
+
+**Question:**
+What is the difference between UNION and UNION ALL?
+
+**My Answer:**
+
+> UNION gives the result of the two tables which does not contain NULL. UNION ALL gives the table regardless of NULL.
+
+**Result:** Partially correct ⚠️
+
+Correct explanation:
+
+> `UNION` combines results and removes duplicate rows, while `UNION ALL` combines results and keeps duplicates. Both can contain NULL values.
+
+Example:
+
+Table A:
+
+```text
+1
+2
+3
+```
+
+Table B:
+
+```text
+3
+4
+5
+```
+
+`UNION`:
+
+```text
+1
+2
+3
+4
+5
+```
+
+`UNION ALL`:
+
+```text
+1
+2
+3
+3
+4
+5
+```
+
+---
+
+## Q39 — JOIN vs UNION
+
+**Question:**
+Two tables contain employees from 2025 and 2026. The company wants one list containing all employees.
+
+**My Answer:**
+
+> UNION
+
+**Result:** Correct ✅
+
+Example:
+
+```sql
+SELECT id, name
+FROM Employees_2025
+
+UNION
+
+SELECT id, name
+FROM Employees_2026;
+```
+
+**Concept:**
+
+* `JOIN` → combines related columns from tables.
+* `UNION` → combines rows from similar result sets.
+
+---
+
+## Q40 — Second Highest Salary Per Department
+
+**Question:**
+Find the second-highest salary in each department, considering distinct salary levels.
+
+**My Answer:**
+
+```sql
+SELECT
+    name,
+    salary,
+    DENSE_RANK() OVER (
+        PARTITION BY department
+        ORDER BY salary DESC
+    ) AS ra
+FROM Employees
+WHERE ra = 2;
+```
+
+**Result:** Concept correct, but the query has syntax/processing issues.
+
+Correct approach:
+
+```sql
+WITH ranked AS (
+    SELECT
+        department,
+        name,
+        salary,
+        DENSE_RANK() OVER (
+            PARTITION BY department
+            ORDER BY salary DESC
+        ) AS salary_rank
+    FROM Employees
+)
+SELECT
+    department,
+    salary AS second_highest_salary
+FROM ranked
+WHERE salary_rank = 2;
+```
+
+**Why DENSE_RANK?**
+
+If salaries are:
+
+```text
+60000
+60000
+50000
+```
+
+then:
+
+```text
+60000 → rank 1
+60000 → rank 1
+50000 → rank 2
+```
+
+Therefore 50,000 is the second-highest **distinct** salary.
