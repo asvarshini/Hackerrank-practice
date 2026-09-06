@@ -1,0 +1,96 @@
+# Histogram of Tweets — SQL Interview Question
+
+## Question
+
+Assume you're given a table `tweets` containing Twitter tweet data. Write a SQL query to obtain a **histogram of tweets posted per user in 2022**.
+
+Output:
+
+* The tweet count per user as `tweet_bucket`
+* The number of Twitter users who fall into that bucket as `user_num`
+
+In other words, group users by the number of tweets they posted in 2022 and count the number of users in each group.
+
+---
+
+## Answer
+
+```sql
+SELECT 
+    u AS tweet_bucket,
+    COUNT(*) AS user_num
+FROM (
+    SELECT 
+        user_id,
+        COUNT(tweet_id) AS u
+    FROM tweets
+    WHERE tweet_date >= '2022-01-01'
+      AND tweet_date < '2023-01-01'
+    GROUP BY user_id
+) AS user_tweets
+GROUP BY u
+ORDER BY u;
+```
+
+## Explanation
+
+### Step 1: Count tweets for each user
+
+```sql
+SELECT 
+    user_id,
+    COUNT(tweet_id) AS u
+FROM tweets
+WHERE tweet_date >= '2022-01-01'
+  AND tweet_date < '2023-01-01'
+GROUP BY user_id;
+```
+
+This gives the number of tweets posted by each user in 2022.
+
+Example:
+
+| user_id |  u |
+| ------: | -: |
+|     111 |  2 |
+|     148 |  1 |
+|     254 |  1 |
+
+Here, `u` represents the **number of tweets posted by each user**.
+
+### Step 2: Create the histogram
+
+```sql
+SELECT 
+    u AS tweet_bucket,
+    COUNT(*) AS user_num
+```
+
+Now we group users by their tweet count:
+
+```sql
+GROUP BY u
+```
+
+For the example:
+
+* 2 users posted **1 tweet**
+* 1 user posted **2 tweets**
+
+Therefore:
+
+| tweet_bucket | user_num |
+| -----------: | -------: |
+|            1 |        2 |
+|            2 |        1 |
+
+### Key Concept
+
+The query uses **two levels of grouping**:
+
+1. `GROUP BY user_id` → Find how many tweets each user posted.
+2. `GROUP BY u` → Find how many users posted that number of tweets.
+
+So the logic is:
+
+**Tweets → Tweets per User → Users per Tweet Count → Histogram**
